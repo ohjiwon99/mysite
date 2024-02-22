@@ -37,5 +37,9 @@ set  id = '123',
 	 gender ='male'
 where no= 6;
 
-select *
-from users;
+-- 로그인
+select no,
+       name
+from users
+where id='aaa'
+and password='1213';
