@@ -13,8 +13,7 @@ public class UserDao {
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	
-	
+
 	public void getConnection() {
 
 		try {
@@ -47,8 +46,7 @@ public class UserDao {
 			System.out.println("error:" + e);
 		}
 	}// close()
-	
-	
+
 	/**************************************
 	 * 회원가입
 	 ************************************/
@@ -82,29 +80,60 @@ public class UserDao {
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		}
-		
-
-		/**************************************
-		 * 로그인
-		 ************************************/
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 		this.close();
 		return count;
 
 	}
 
+	/**************************************
+	 * 로그인
+	 ************************************/
+
+	public /*(자료형쓰기)*/UserVo selectUserByIdPw(UserVo userVo) {
+		UserVo authuser = null;
+
+		this.getConnection();
+
+		// 3. SQL문 준비 / 바인딩 / 실행
+
+		try {
+		
+		// SQL문 준비
+		String query = "";
+		query += " select no, ";// 띄어쓰기
+		query += "        name ";
+		query += " from   users ";
+		query += " where id= ? ";
+		query += " and password=?; ";
+
+		// 바인딩
+		pstmt = conn.prepareStatement(query);
+		pstmt.setString(1, userVo.getId());
+		pstmt.setString(2, userVo.getPw()); //숫자 바꾸기 꼭!!!!!!!!!!!
+
+		// - 실행
+		rs = pstmt.executeQuery();
+
+		// 4.결과처리
+		while (rs.next()) {
+			int no = rs.getInt("no");
+			String name = rs.getString("name");
+			authuser = new UserVo();  
+			
+			authuser.setNo(no);
+			authuser.setName(name);
+			
+		}
+		}catch(
+
+			SQLException e)
+	
+		{System.out.println("error:" + e);
+		}	
+
+	this.close();
+	return authuser;}
+
 }
+

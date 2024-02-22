@@ -7,8 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.catalina.tribes.ChannelSender;
+import javax.servlet.http.HttpSession;
 
 import com.javaex.dao.UserDao;
 import com.javaex.util.WebUtil;
@@ -23,9 +22,8 @@ public class userController extends HttpServlet {
 	// 메소드-gs
 
 	// 메소드-일반
-	protected void doGet(HttpServletRequest request, 
-			             HttpServletResponse response)
-		               	throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		// user 실행되는지 확인
 		System.out.println("userController");
@@ -41,8 +39,6 @@ public class userController extends HttpServlet {
 
 			// 회원가입 폼
 			WebUtil.forward(request, response, "/WEB-INF/views/user/joinform.jsp");
-			
-			
 
 			/******************************************************
 			 * 회원가입
@@ -75,22 +71,53 @@ public class userController extends HttpServlet {
 
 			// 회원가입 완료 폼
 			WebUtil.forward(request, response, "/WEB-INF/views/user/joinOK.jsp");
-			
+
 			/******************************************************
 			 * 로그인폼
 			 ******************************************************/
-			
-			//String action2 = request.getParameter("action");
-			//System.out.println(action2);
+
+			// String action2 = request.getParameter("action");
+			// System.out.println(action2);
 
 		} else if ("loginForm".equals(action)) {
-			System.out.println("loginForm:로그인폼");
+			System.out.println("user>loginForm:로그인폼");
 
 			// 로그인 완료 폼
 			WebUtil.forward(request, response, "/WEB-INF/views/user/loginForm.jsp");
-			
 
-		} else {
+		} else if ("login".equals(action)) {
+			System.out.println("user>login:로그인");
+
+			String id = request.getParameter("id");
+			String password = request.getParameter("pw");
+
+			UserVo userVo = new UserVo(id, password);
+
+			UserDao userDao = new UserDao();
+			UserVo authUser = userDao.selectUserByIdPw(userVo); // id pw
+			// no name
+
+			if (authUser != null) {// 로그인성공
+				HttpSession session = request.getSession();
+				session.setAttribute("authUser", authUser);
+
+				WebUtil.redirect(request, response, "/mysite/main");
+
+			} else {// 로그인 실패
+				System.out.println("로그인 실패");
+
+				WebUtil.redirect(request, response, "/mysite/user?action=loginForm");
+			}
+		} else if ("logout".equals(action)) {
+			System.out.println("logout");
+			
+			HttpSession session = request.getSession();
+			session.invalidate();
+			
+			WebUtil.redirect(request, response, "/mysite/main");
+		}
+
+		else {
 			System.out.println("action값을 다시 확인해주세요");
 		}
 
@@ -101,5 +128,9 @@ public class userController extends HttpServlet {
 
 		doGet(request, response);
 	}
+	// http://localhost:8080/mysite/main 메인
+	// http://localhost:8080/mysite/user?action=joinform 회원가입
+	// http://localhost:8080/mysite/user?action=loginForm 로그인
+	//http://localhost:8080/mysite/user?action=logout 로그아웃
 
 }
