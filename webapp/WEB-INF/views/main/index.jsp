@@ -20,6 +20,8 @@
 		<!-- //header +nav-->
 		<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 		<!-- //header +nav-->
+		
+		
 
 		<div id="container" class="clearfix">
 			<!-- aside 없음 -->

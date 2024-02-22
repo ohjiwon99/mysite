@@ -110,10 +110,49 @@ public class userController extends HttpServlet {
 			}
 		} else if ("logout".equals(action)) {
 			System.out.println("logout");
-			
+
 			HttpSession session = request.getSession();
 			session.invalidate();
-			
+
+			WebUtil.redirect(request, response, "/mysite/main");
+
+			/******************************************************
+			 * 회원정보수정
+			 ******************************************************/
+		} else if ("modifyForm".equals(action)) {
+			System.out.println("user>joinForm>modifyForm:회원정보수정폼");
+
+			// 회원정보수정 폼
+			WebUtil.forward(request, response, "/WEB-INF/views/user/modifyForm.jsp");
+
+			String id = request.getParameter("id");
+			String password = request.getParameter("pw");
+			String name = request.getParameter("name");
+			String gender = request.getParameter("gender");
+
+			UserVo userVo = new UserVo(id, password, name, gender);
+
+			UserDao userDao = new UserDao();
+			UserVo authUser = userDao.selectUserByIdPw(userVo); // id pw 이거 한번 더 확인!!!! 수저애0
+			// no name
+
+			if (authUser != null) {// 로그인성공
+				HttpSession session = request.getSession();
+				session.setAttribute("authUser", authUser);
+
+				WebUtil.redirect(request, response, "/mysite/main");
+
+			} else {// 로그인 실패
+				System.out.println("로그인 실패");
+
+				WebUtil.redirect(request, response, "/mysite/user?action=loginForm");
+			}
+		} else if ("logout".equals(action)) {
+			System.out.println("logout");
+
+			HttpSession session = request.getSession();
+			session.invalidate();
+
 			WebUtil.redirect(request, response, "/mysite/main");
 		}
 
@@ -131,6 +170,6 @@ public class userController extends HttpServlet {
 	// http://localhost:8080/mysite/main 메인
 	// http://localhost:8080/mysite/user?action=joinform 회원가입
 	// http://localhost:8080/mysite/user?action=loginForm 로그인
-	//http://localhost:8080/mysite/user?action=logout 로그아웃
+	// http://localhost:8080/mysite/user?action=logout 로그아웃
 
 }
