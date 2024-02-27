@@ -60,6 +60,15 @@ UserVo authUser = (UserVo) session.getAttribute("authUser");
 
 							<!-- 아이디 -->
 							<div class="form-group">
+								<label class="form-text" for="input-uid">아이디</label> <input
+									type="hidden" id="input-id" name="id"
+									value="<%=authUser.getId()%>" placeholder="아이디를 입력하세요">
+
+								<span class="text-large bold"><%=authUser.getId()%></span>
+							</div>
+
+							<!-- 아이디 -->
+							<div class="form-group">
 								<label class="form-text" for="input-uid">아이디</label> <span
 									class="text-large bold">userid</span>
 							</div>

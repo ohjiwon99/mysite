@@ -119,6 +119,45 @@ public class userController extends HttpServlet {
 			/******************************************************
 			 * 회원정보수정
 			 ******************************************************/
+	/*	} else if ("modifyform".equals(action)) {
+	         System.out.println("user>modifyform");
+
+	         WebUtil.forward(request, response, "/WEB-INF/views/user/modifyForm.jsp");
+
+	      } else if ("logout".equals(action)) {
+	         System.out.println("user>logout");
+	         
+	         HttpSession session = request.getSession();
+	         session.invalidate();
+	         
+	         
+	         WebUtil.redirect(request, response, "/mysite3/main");
+	         
+	         
+	      }else if ("update".equals(action)) {
+	            System.out.println("user>update");
+	            
+	            int no = Integer.parseInt(request.getParameter("no"));
+	            String id = request.getParameter("id");
+	            String password = request.getParameter("pw");
+	            String name = request.getParameter("name");
+	            String gender = request.getParameter("gender");
+
+	            // vo로 묶기
+	            UserVo userVo = new UserVo(no, id, password, name, gender);
+	            System.out.println(userVo.toString());
+
+	            // db관련 업무
+	            UserDao userDao = new UserDao();
+
+	            // db에 저장
+	            userDao.updateUser(userVo);
+	            
+	            HttpSession session = request.getSession();
+	            session.setAttribute("authUser", userVo);
+
+	            WebUtil.redirect(request, response, "/mysite3/main");*/
+	            
 		} else if ("modifyForm".equals(action)) {
 			System.out.println("user>joinForm>modifyForm:회원정보수정폼");
 
@@ -133,10 +172,10 @@ public class userController extends HttpServlet {
 			UserVo userVo = new UserVo(id, password, name, gender);
 
 			UserDao userDao = new UserDao();
-			UserVo authUser = userDao.selectUserByIdPw(userVo); // id pw 이거 한번 더 확인!!!! 수저애0
+			UserVo authUser = userDao.selectUserByIdPw(userVo); // id pw 이거 한번 더 확인!!!! 수정!ㄴ
 			// no name
 
-			if (authUser != null) {// 로그인성공
+			if (authUser != null) {// 로그인 수정
 				HttpSession session = request.getSession();
 				session.setAttribute("authUser", authUser);
 
